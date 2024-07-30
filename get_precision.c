@@ -1,47 +1,30 @@
 #include "main.h"
-#include <ctype.h>
 
 /**
-	* get_precision - Calculates the precision for printing
-	* @format: Formatted string in which to print the arguments
-	* @i: Pointer to the current index in the format string
-	* @list: List of arguments to be printed.
-	*
-	* Return: Precision.
-	*/
-int get_precision(const char *format, int *i, va_list list)
+ * get_precision - gets the precision from the format string
+ * @s: the format string
+ * @params: the parameters struct
+ * @ap: the argument pointer
+ * Return: new pointer
+*/
+
+char *get_precision(char *s, params_t *params, va_list ap)
 {
-	int curr_i = *i + 1;
-	int precision = -1;
+	int d = 0;
 
-	if (format[curr_i] != '.')
-	return (precision);
-
-	precision = 0;
-
-	curr_i++;
-
-	while (format[curr_i] != '\0' && format[curr_i] != '%')
+	if (*s != '.')
+		return (s);
+	s++;
+	if (*s == '*')
 	{
-	if (isdigit(format[curr_i]))
-	{
-	precision = precision * 10 + (format[curr_i] - '0');
-	}
-	else if (format[curr_i] == '*')
-	{
-
-	curr_i++;
-
-	precision = va_arg(list, int);
-	break;
+		d = va_arg(ap, int);
+		s++;
 	}
 	else
-	break;
-
-	curr_i++;
+	{
+		while (_isdigit(*s))
+			d = d * 10 + (*s++ - '0');
 	}
-
-	*i = curr_i - 1;
-
-	return (precision);
+	params->precision = d;
+	return (s);
 }
